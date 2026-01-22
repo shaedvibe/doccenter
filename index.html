@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHAED - Interactive Documentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card:hover { transform: translateY(-4px); }
+  </style>
+</head>
+<body class="bg-slate-900 min-h-screen">
+
+  <!-- ============================================
+       PASSWORD GATE
+       To change the password, edit the line below
+       ============================================ -->
+  <script>
+    // ⚠️ CHANGE THIS PASSWORD - don't use the default!
+    const SITE_PASSWORD = "shaed2025";
+    
+    // Check if already authenticated this session
+    const isAuthenticated = sessionStorage.getItem("authenticated") === "true";
+  </script>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-6">
+    <div class="w-full max-w-sm">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-white mb-2">SHAED</h1>
+        <p class="text-slate-400">Enter password to continue</p>
+      </div>
+      <div class="bg-slate-800 border border-slate-700 rounded-xl p-6">
+        <div class="mb-4">
+          <input 
+            type="password" 
+            id="password-input" 
+            placeholder="Password"
+            class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            onkeypress="if(event.key === 'Enter') checkPassword()"
+          >
+        </div>
+        <div id="error-message" class="text-red-400 text-sm mb-4 hidden">
+          Incorrect password. Please try again.
+        </div>
+        <button 
+          onclick="checkPassword()"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors"
+        >
+          Access Documentation
+        </button>
+      </div>
+      <p class="text-center text-slate-500 text-sm mt-6">
+        Need access? Contact your SHAED representative.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Content (Hidden until authenticated) -->
+  <div id="main-content" class="hidden">
+    <div class="max-w-4xl mx-auto px-6 py-16">
+      
+      <!-- Header -->
+      <div class="text-center mb-16">
+        <div class="flex items-center justify-center gap-4 mb-2">
+          <h1 class="text-4xl font-bold text-white">SHAED</h1>
+          <button 
+            onclick="logout()"
+            class="text-slate-500 hover:text-slate-300 text-sm underline"
+          >
+            Logout
+          </button>
+        </div>
+        <p class="text-slate-400 text-lg">Interactive Documentation & Tools</p>
+      </div>
+
+      <!-- Document Cards -->
+      <div class="grid gap-6">
+
+        <!-- ETA Tracking PRD -->
+        <a href="shaed_eta_tracking.html" class="card block bg-slate-800 border border-slate-700 rounded-xl p-6 transition-all duration-200 hover:border-blue-500 hover:bg-slate-750">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-xl font-semibold text-white mb-1">Vehicle ETA Tracking</h2>
+              <p class="text-slate-400">PRD & Technical Architecture for predictive delivery timelines</p>
+              <div class="flex gap-2 mt-3">
+                <span class="text-xs bg-blue-900 text-blue-300 px-2 py-1 rounded">PRD</span>
+                <span class="text-xs bg-emerald-900 text-emerald-300 px-2 py-1 rounded">BigQuery</span>
+                <span class="text-xs bg-purple-900 text-purple-300 px-2 py-1 rounded">Medallion Architecture</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Add more documents here - copy a card block and update href, title, description, tags -->
+
+      </div>
+
+      <!-- Footer -->
+      <div class="text-center mt-16 text-slate-500 text-sm">
+        <p>© 2025 SHAED. Confidential.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Password Logic -->
+  <script>
+    function checkPassword() {
+      const input = document.getElementById("password-input").value;
+      const errorMsg = document.getElementById("error-message");
+      
+      if (input === SITE_PASSWORD) {
+        sessionStorage.setItem("authenticated", "true");
+        showContent();
+      } else {
+        errorMsg.classList.remove("hidden");
+        document.getElementById("password-input").value = "";
+      }
+    }
+
+    function showContent() {
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("main-content").classList.remove("hidden");
+    }
+
+    function logout() {
+      sessionStorage.removeItem("authenticated");
+      location.reload();
+    }
+
+    // Check on page load
+    if (isAuthenticated) {
+      showContent();
+    }
+  </script>
+
+</body>
+</html>
